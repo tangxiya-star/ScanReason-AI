@@ -4,6 +4,14 @@ import { useState } from "react";
 
 type Props = { onSubmit: (q: string) => void };
 
+const SUGGESTIONS: { label: string; text: string }[] = [
+  { label: "Differential",   text: "Could this be small vessel ischemic disease instead of MS? What's your differential?" },
+  { label: "McDonald 2017",  text: "Does this meet 2017 McDonald criteria? Is dissemination in space established?" },
+  { label: "Next step",      text: "What's the highest-yield next investigation — post-contrast T1 or cervical spine MRI?" },
+  { label: "Red flags",      text: "Are there any atypical features that should make me reconsider the MS diagnosis?" },
+  { label: "Confidence",     text: "How confident are you in this read, and what would lower your confidence?" },
+];
+
 export default function ChatInput({ onSubmit }: Props) {
   const [val, setVal] = useState("");
   return (
@@ -16,6 +24,24 @@ export default function ChatInput({ onSubmit }: Props) {
       }}
       className="sticky bottom-0 bg-slate-950/70 backdrop-blur-xl border-t border-white/5 p-3"
     >
+      {/* Suggestion chips — common junior-clinician questions */}
+      <div className="flex flex-wrap gap-1.5 mb-2">
+        {SUGGESTIONS.map((s) => (
+          <button
+            key={s.label}
+            type="button"
+            onClick={() => {
+              onSubmit(s.text);
+              setVal("");
+            }}
+            title={s.text}
+            className="text-[10px] font-mono tracking-wider uppercase px-2 py-1 rounded-md bg-white/[0.03] border border-white/10 text-slate-300 hover:text-cyan-200 hover:border-cyan-400/40 hover:bg-cyan-500/5 transition"
+          >
+            {s.label}
+          </button>
+        ))}
+      </div>
+
       <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 focus-within:border-cyan-400/60 focus-within:ring-2 focus-within:ring-cyan-400/15 focus-within:shadow-[0_0_18px_-4px_rgba(56,189,248,0.5)] transition">
         <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 pulse-dot shrink-0" />
         <input
