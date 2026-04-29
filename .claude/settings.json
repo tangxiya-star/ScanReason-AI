@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(mkdir -p public/slices)",
+      "Bash(curl -L -o /tmp/MRHead.nrrd \"https://github.com/Slicer/SlicerTestingData/releases/download/SHA256/cc211f0dfd9a05ca3841ce1141b292898b2dd2d3f08286affadf823a7e58df93\")",
+      "Bash(python3 /tmp/convert_mrhead.py)",
+      "Bash(curl -s -o /dev/null -w \"slice_128: %{http_code}\\\\n\" \"http://localhost:3001/slices/slice_128.jpg\")",
+      "Bash(curl -s -o /dev/null -w \"page: %{http_code}\\\\n\" \"http://localhost:3001/\")"
+    ]
+  }
+}
