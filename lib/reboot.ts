@@ -73,7 +73,7 @@ export async function rebootExplain(input: RebootInput): Promise<RebootResult> {
             type: "image",
             source: {
               type: "base64",
-              media_type: input.image.media as any,
+              media_type: input.image.media,
               data: input.image.data,
             },
           },

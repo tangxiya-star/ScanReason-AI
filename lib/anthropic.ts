@@ -7,12 +7,26 @@ export const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 export const MODEL_FAST = "claude-sonnet-4-6";
 export const MODEL_DEEP = "claude-opus-4-7";
 
-let cachedImage: { media: string; data: string } | null = null;
+export type ImageMedia = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
+export type ClientImage = { media: ImageMedia; data: string };
 
-export type ClientImage = { media: string; data: string };
+let cachedImage: ClientImage | null = null;
 
-export function loadMRIImage(override?: ClientImage | null): ClientImage {
-  if (override && override.data) return override;
+function normalizeMedia(s: string): ImageMedia {
+  switch (s) {
+    case "image/png":
+    case "image/gif":
+    case "image/webp":
+      return s;
+    default:
+      return "image/jpeg";
+  }
+}
+
+export function loadMRIImage(override?: { media: string; data: string } | null): ClientImage {
+  if (override && override.data) {
+    return { media: normalizeMedia(override.media), data: override.data };
+  }
   if (cachedImage) return cachedImage;
   const p = path.join(process.cwd(), "public", "sample-mri.jpg");
   const buf = fs.readFileSync(p);

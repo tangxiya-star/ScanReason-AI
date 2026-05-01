@@ -9,16 +9,13 @@ import {
 import { routeLLM } from "./tokenrouter";
 import { rebootExplain } from "./reboot";
 
-type ImageBlock = Anthropic.Messages.ImageBlockParam;
-type Base64Media = Anthropic.Messages.Base64ImageSource["media_type"];
-
-function imageBlock(override?: ClientImage | null): ImageBlock {
+function imageBlock(override?: ClientImage | null): Anthropic.Messages.ImageBlockParam {
   const img = loadMRIImage(override);
   return {
     type: "image",
     source: {
       type: "base64",
-      media_type: img.media as Base64Media,
+      media_type: img.media,
       data: img.data,
     },
   };
