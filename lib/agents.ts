@@ -1,3 +1,4 @@
+import type Anthropic from "@anthropic-ai/sdk";
 import {
   loadMRIImage,
   CASE_BRIEF,
@@ -8,11 +9,8 @@ import {
 import { routeLLM } from "./tokenrouter";
 import { rebootExplain } from "./reboot";
 
-type AnthropicImageMedia = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
-type ImageBlock = {
-  type: "image";
-  source: { type: "base64"; media_type: AnthropicImageMedia; data: string };
-};
+type ImageBlock = Anthropic.Messages.ImageBlockParam;
+type Base64Media = Anthropic.Messages.Base64ImageSource["media_type"];
 
 function imageBlock(override?: ClientImage | null): ImageBlock {
   const img = loadMRIImage(override);
@@ -20,7 +18,7 @@ function imageBlock(override?: ClientImage | null): ImageBlock {
     type: "image",
     source: {
       type: "base64",
-      media_type: img.media as AnthropicImageMedia,
+      media_type: img.media as Base64Media,
       data: img.data,
     },
   };
