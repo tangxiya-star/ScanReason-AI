@@ -8,14 +8,22 @@ import {
 import { routeLLM } from "./tokenrouter";
 import { rebootExplain } from "./reboot";
 
+type AnthropicImageMedia = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
 type ImageBlock = {
   type: "image";
-  source: { type: "base64"; media_type: string; data: string };
+  source: { type: "base64"; media_type: AnthropicImageMedia; data: string };
 };
 
 function imageBlock(override?: ClientImage | null): ImageBlock {
   const img = loadMRIImage(override);
-  return { type: "image", source: { type: "base64", media_type: img.media, data: img.data } };
+  return {
+    type: "image",
+    source: {
+      type: "base64",
+      media_type: img.media as AnthropicImageMedia,
+      data: img.data,
+    },
+  };
 }
 
 function caseBrief(override?: ClientImage | null) {
